@@ -1,0 +1,10 @@
+.site-footer { min-height: 110px; padding: 22px 0; background: var(--primary-dark); color: #c6cadd; }
+.site-footer__inner { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.site-footer p { margin: 10px 0 0; font-size: 12px; line-height: 1.45; }
+.site-footer__meta { text-align: right; }
+.site-footer__meta p { margin: 4px 0; }
+@media (max-width: 767px) {
+  .site-footer { min-height: 126px; padding: 20px 0; }
+  .site-footer__inner { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .site-footer__meta { text-align: left; }
+}

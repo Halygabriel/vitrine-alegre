@@ -1,0 +1,27 @@
+.sort-control {
+  display: inline-flex;
+  height: 38px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 3px;
+  padding-left: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.sort-control select {
+  min-width: 128px;
+  height: 100%;
+  padding: 0 30px 0 2px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+@media (max-width: 767px) {
+  .sort-control { width: 100%; }
+  .sort-control select { flex: 1; }
+}

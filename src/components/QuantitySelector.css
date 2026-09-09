@@ -1,0 +1,23 @@
+.quantity-selector {
+  display: inline-grid;
+  grid-template-columns: 42px 42px 42px;
+  height: 42px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+.quantity-selector button,
+.quantity-selector span {
+  display: grid;
+  place-items: center;
+  color: var(--brand);
+  font-weight: 800;
+}
+.quantity-selector button { background: transparent; cursor: pointer; font-size: 18px; }
+.quantity-selector button:hover:not(:disabled) { background: var(--background); }
+.quantity-selector button:disabled { cursor: default; color: var(--text-muted); opacity: .6; }
+.quantity-selector span { border-inline: 1px solid var(--border); color: var(--text); font-size: 14px; }
+@media (max-width: 767px) {
+  .quantity-selector { grid-template-columns: 38px 38px 38px; height: 40px; }
+}

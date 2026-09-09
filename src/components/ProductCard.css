@@ -1,0 +1,78 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+.product-card {
+  min-width: 0;
+  height: 444px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+.product-card:hover { transform: translateY(-2px); border-color: #d4d8e4; box-shadow: 0 7px 20px rgba(23,28,66,.1); }
+.product-card__image-link {
+  position: relative;
+  display: grid;
+  height: 238px;
+  place-items: center;
+  border-bottom: 1px solid var(--border);
+  background: #f8f9fc;
+}
+.product-card__image-link img { width: 72%; height: 72%; object-fit: contain; }
+.discount-badge {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  display: inline-grid;
+  min-width: 45px;
+  height: 25px;
+  padding: 0 9px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--discount);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+}
+.product-card__body { display: flex; height: 206px; flex-direction: column; padding: 13px 14px 14px; }
+.product-card__category {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.25;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.product-card__title {
+  display: -webkit-box;
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.25;
+  font-weight: 800;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.product-card__title:hover { color: var(--brand); }
+.product-card__spacer { flex: 1; min-height: 4px; }
+.product-card__prices { min-height: 45px; padding-top: 5px; }
+.product-card__original { display: block; color: var(--text-muted); font-size: 11px; line-height: 1.3; text-decoration: line-through; }
+.product-card__original--hidden { text-decoration: none; }
+.product-card__prices strong { display: block; margin-top: 2px; color: var(--brand); font-size: 20px; line-height: 1.05; font-weight: 900; letter-spacing: -.02em; }
+.product-card__add { width: 100%; min-height: 40px; margin-top: 7px; padding-inline: 12px; }
+@media (max-width: 1023px) {
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+  .product-grid { grid-template-columns: 1fr; gap: 16px; }
+  .product-card { height: auto; min-height: 438px; }
+  .product-card__image-link { height: 240px; }
+  .product-card__body { height: 198px; }
+}

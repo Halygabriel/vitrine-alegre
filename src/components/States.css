@@ -1,0 +1,31 @@
+.state-panel {
+  min-height: 360px;
+  display: flex;
+  padding: 48px 20px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.state-panel__icon {
+  display: grid;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eef0f9;
+  color: var(--brand);
+}
+.state-panel__icon--error { background: #fde8e3; color: var(--discount); }
+.state-panel h2 { margin: 0 0 10px; color: var(--brand); font-size: 20px; }
+.state-panel p { margin: 0; color: var(--text-secondary); font-size: 14px; }
+.state-panel__button { min-width: 190px; margin-top: 22px; }
+.state-panel__link { display: inline-flex; align-items: center; justify-content: center; }
+.state-panel--empty { min-height: 330px; box-shadow: none; border: 1px solid var(--border); }
+@media (max-width: 767px) {
+  .state-panel { min-height: 310px; padding: 36px 18px; }
+}

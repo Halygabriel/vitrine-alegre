@@ -1,0 +1,20 @@
+@keyframes skeletonPulse { 0%,100% { opacity: .65; } 50% { opacity: 1; } }
+.skeleton-pulse { background: #e6e8f0; animation: skeletonPulse 1.4s ease-in-out infinite; }
+.product-skeleton { min-width: 0; height: 444px; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-card); }
+.product-skeleton__image { height: 238px; }
+.product-skeleton__body { padding: 16px; }
+.product-skeleton__line { height: 12px; margin-bottom: 12px; border-radius: 6px; }
+.product-skeleton__line--short { width: 38%; }
+.product-skeleton__line--medium { width: 68%; }
+.product-skeleton__button { height: 40px; margin-top: 18px; border-radius: 8px; }
+.detail-skeleton { display: grid; grid-template-columns: 1.1fr 1.25fr; gap: 36px; min-height: 520px; padding: 28px; border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-card); }
+.detail-skeleton__image { min-height: 440px; border-radius: 10px; }
+.detail-skeleton__info { padding: 30px 12px; }
+.detail-skeleton__title { width: 55%; height: 34px; margin: 14px 0; border-radius: 7px; }
+.detail-skeleton__price { width: 42%; height: 48px; margin: 32px 0; border-radius: 8px; }
+.detail-skeleton__button { width: 100%; height: 48px; border-radius: 8px; }
+@media (max-width: 767px) {
+  .detail-skeleton { grid-template-columns: 1fr; gap: 20px; padding: 16px; }
+  .detail-skeleton__image { min-height: 340px; }
+  .detail-skeleton__info { padding: 10px 0; }
+}

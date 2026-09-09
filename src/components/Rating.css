@@ -1,0 +1,7 @@
+.rating { display: flex; min-width: 0; align-items: center; gap: 7px; color: var(--text-secondary); font-size: 13px; }
+.rating__stars { display: inline-flex; gap: 1px; letter-spacing: -1px; }
+.rating__star { color: var(--rating-empty); font-size: 17px; line-height: 1; }
+.rating__star--filled { color: var(--rating); }
+.rating__value, .rating__reviews { white-space: nowrap; }
+.rating--compact { gap: 5px; font-size: 12px; }
+.rating--compact .rating__star { font-size: 15px; }

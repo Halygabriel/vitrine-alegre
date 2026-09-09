@@ -1,0 +1,27 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.brand__mark {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--accent);
+  color: var(--brand);
+  font-size: 22px;
+  font-weight: 900;
+}
+.brand__name strong { color: var(--accent); }
+.brand--compact { font-size: 18px; }
+.brand--compact .brand__mark { width: 31px; height: 31px; font-size: 20px; }
+@media (max-width: 767px) {
+  .brand { gap: 8px; font-size: 16px; }
+  .brand__mark { width: 30px; height: 30px; border-radius: 8px; font-size: 18px; }
+}
