@@ -1,7 +1,7 @@
 # Vitrine Alegre
 
 **Repositório GitHub (entrega):** https://github.com/Halygabriel/vitrine-alegre  
-**Site publicado na Vercel:** **PENDENTE — substitua esta linha pelo link real gerado pela Vercel depois do primeiro deploy.**
+**Site publicado na Vercel:** https://vitrine-alegre-kappa.vercel.app/
 
 > Antes de enviar a tarefa, confirme que os dois endereços acima são os links públicos definitivos. O link da Vercel não pode ser inventado: ele deve ser o endereço real mostrado no painel depois do deploy.
 
