@@ -6,10 +6,11 @@ import Rating from './Rating.jsx';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const originalPrice = getOriginalBrlPrice(product);
   const finalPrice = getFinalBrlPrice(product);
   const discounted = shouldShowDiscount(product);
+  const isInCart = items.some((item) => item.id === Number(product.id));
 
   return (
     <article className="product-card">
@@ -29,6 +30,9 @@ export default function ProductCard({ product }) {
         <button type="button" className="primary-button product-card__add" onClick={() => addItem(product, 1)}>
           Add
         </button>
+        {isInCart ? (
+          <p className="product-card__cart-note" role="status">Produto já adicionado no carrinho</p>
+        ) : null}
       </div>
     </article>
   );

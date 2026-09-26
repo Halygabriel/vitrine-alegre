@@ -1,78 +1,144 @@
 # Vitrine Alegre
 
-Vitrine Alegre is a responsive academic storefront built with React and Vite from the supplied assignment specification and visual mockups. It consumes the DummyJSON Products API, keeps storefront filters in the URL, converts discounted USD prices to BRL using the assignment's fixed exchange rate, and provides product details plus a persistent shopping cart.
+**Repositório GitHub (entrega):** https://github.com/Halygabriel/vitrine-alegre  
+**Site publicado na Vercel:** **PENDENTE — substitua esta linha pelo link real gerado pela Vercel depois do primeiro deploy.**
 
-## Technologies
+> Antes de enviar a tarefa, confirme que os dois endereços acima são os links públicos definitivos. O link da Vercel não pode ser inventado: ele deve ser o endereço real mostrado no painel depois do deploy.
+
+## Sobre o projeto
+
+Vitrine Alegre é uma vitrine de produtos desenvolvida com React + Vite para a disciplina de Desenvolvimento Front-End. O projeto consome a API DummyJSON, usa rotas reais, mantém os filtros da listagem na URL e possui carrinho compartilhado e persistente.
+
+A aplicação foi organizada para que busca, categoria, ordenação e página possam ser recuperadas ao atualizar a tela, usar Voltar/Avançar do navegador ou compartilhar a URL.
+
+## Funcionalidades principais
+
+- listagem de produtos consumida da DummyJSON;
+- busca com debounce de 400 ms;
+- filtro por categoria;
+- ordenação;
+- paginação;
+- busca, categoria, ordenação e página gravadas na URL;
+- página de detalhes em `/products/:id`;
+- galeria do produto;
+- produtos relacionados da mesma categoria;
+- carrinho em `/cart`;
+- produtos repetidos somam quantidade em vez de criar linhas duplicadas;
+- totais do carrinho calculados a partir dos itens;
+- confirmação visual ao adicionar produto ao carrinho;
+- mensagem discreta **“Produto já adicionado no carrinho”** dentro do card da vitrine e também nos detalhes, exibida somente quando aquele produto está no carrinho;
+- persistência do carrinho no `localStorage`;
+- Sign in demonstrativo somente no front-end, sem backend;
+- tratamento de loading, erro, vazio e estado inicial;
+- layout responsivo;
+- acessibilidade de teclado e estados de foco;
+- configuração de SPA para o F5 funcionar nas rotas da Vercel.
+
+## Extensão obrigatória além do deploy
+
+A extensão principal escolhida da seção 4.3 foi **carrinho persistente no `localStorage`**.
+
+Ela está implementada em `src/context/CartContext.jsx`. Ao adicionar itens, a lista é salva no navegador. Se a página for recarregada, os produtos e suas quantidades continuam no carrinho.
+
+O projeto também implementa outras extensões da mesma seção:
+
+- **AbortController** para cancelar requisições antigas;
+- **hook próprio** `useDebouncedValue` para a busca;
+- melhorias de **acessibilidade**.
+
+## Tecnologias
 
 - React 18
 - Vite 5
 - React Router DOM 6
-- Modern JavaScript and React Hooks
-- Native CSS only
-- Fetch API with `AbortController`
-- Browser `localStorage`
-- Node's built-in test runner for focused logic tests
+- JavaScript moderno
+- React Hooks
+- CSS puro
+- Fetch API
+- `AbortController`
+- `localStorage`
+- DummyJSON Products API
+- Node Test Runner para testes de lógica
 
-No CSS framework, component library, global state library, or data-fetching library is used.
+Não são usados Bootstrap, Tailwind, biblioteca de componentes ou biblioteca externa de gerenciamento de estado.
 
-## Requirements
+## Como rodar do zero
 
-- Node.js 18 or newer
-- npm 9 or newer
-- Internet access while installing dependencies and while using the live DummyJSON API
+### 1. Pré-requisitos
 
-## Install and run
+- Node.js 18 ou superior;
+- npm instalado;
+- internet para instalar dependências e acessar a DummyJSON.
+
+### 2. Baixar o projeto
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/Halygabriel/vitrine-alegre.git
+cd vitrine-alegre
+```
+
+Ou baixe o ZIP do GitHub e extraia a pasta.
+
+### 3. Instalar as dependências
 
 ```bash
 npm install
+```
+
+### 4. Iniciar o projeto
+
+```bash
 npm run dev
 ```
 
-Vite will print the local development URL in the terminal.
+O Vite mostrará o endereço local, normalmente semelhante a:
 
-## Production build
+```text
+http://localhost:5173/
+```
+
+### 5. Gerar a versão de produção
 
 ```bash
 npm run build
+```
+
+### 6. Visualizar a build localmente
+
+```bash
 npm run preview
 ```
 
-The production bundle is generated in `dist/`.
-
-## Tests
+## Testes
 
 ```bash
 npm test
 ```
 
-The focused tests cover pricing, discount rules, non-mutating sorting, DummyJSON response handling, combined search/category behavior, HTTP failures, invalid product IDs, and category validation.
+Os testes cobrem lógica de preço e desconto, ordenação sem mutação, resposta da DummyJSON, combinação de busca com categoria, erros HTTP, IDs inválidos e validação de categorias.
 
-## Routes
+## Rotas
 
-- `/` — storefront and product listing
-- `/products/:id` — product details loaded directly from the route parameter
-- `/cart` — shared shopping cart
-- any other route — controlled 404 page with a return action
+| Rota | Tela |
+| --- | --- |
+| `/` | Vitrine/listagem |
+| `/products/:id` | Detalhes do produto |
+| `/cart` | Carrinho |
+| qualquer outra | Página 404 controlada |
 
-`public/_redirects` and `vercel.json` provide SPA fallbacks for common static hosts so direct route refreshes can resolve to `index.html`.
+Exemplo:
 
-## API
+```text
+/products/1
+```
 
-All external product API communication is centralized in `src/services/api.js`.
+## Estado da vitrine na URL
 
-The service exposes:
+Os filtros importantes não ficam somente no estado interno do React. Eles aparecem na URL.
 
-- `listProducts({ page, search, category, sort, signal })`
-- `getProduct(id, { signal })`
-- `listCategories({ signal })`
-
-The implementation validates `response.ok`, validates important response shapes, uses `data.products` for listings, preserves the API-provided `total`, and reports controlled English error messages.
-
-DummyJSON exposes search and category listing as separate routes. When both a search term and category are active, the service fetches the complete search result set once, applies the category filter and selected sort locally, and then paginates the combined result. This keeps the behavior represented by the shared storefront URL without scattering endpoint knowledge across components.
-
-## Storefront URL state
-
-Storefront state is represented with query parameters instead of existing only in transient component state. Examples:
+Exemplos:
 
 ```text
 /?search=phone
@@ -80,102 +146,190 @@ Storefront state is represented with query parameters instead of existing only i
 /?search=phone&category=smartphones&sort=price-asc&page=2
 ```
 
-Supported parameters:
+Parâmetros aceitos:
 
 - `search`
 - `category`
-- `page`
 - `sort`
+- `page`
 
-Search uses a 400 ms debounce before the URL is updated. Changing the search term, category, or sort resets the current page to page 1. Browser Back, Forward, refresh, bookmarks, and shared URLs therefore preserve storefront state. If filters make a previously valid page number exceed the new page count, the URL is safely replaced with the last valid page.
+Ao mudar busca, categoria ou ordenação, a página volta para 1. O botão Voltar, o F5 e um link compartilhado preservam o estado da vitrine.
 
-## Pagination
+## Os quatro estados exigidos
 
-The listing uses 12 products per page:
+Os estados são reais e podem ser demonstrados durante a apresentação.
 
-```js
-skip = (page - 1) * 12
-```
+### 1. Estado inicial
 
-The page count is calculated from the API `total`, never from the length of the current page's product array.
-
-## Pricing
-
-Pricing helpers live in `src/utils/pricing.js` and `src/utils/currency.js`.
+Abra:
 
 ```text
-final USD price = price × (1 - discountPercentage / 100)
-BRL exchange rate = 5.20
+/
 ```
 
-BRL values use `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })` as required by the assignment. A discount badge is displayed only when `discountPercentage >= 5`.
+Sem filtros, a vitrine carrega a listagem inicial.
 
-## Cart architecture
+### 2. Carregando
 
-`src/context/CartContext.jsx` is the single shared cart source for the header, product cards, product details, and cart page.
+Recarregue a página. Para enxergar melhor o skeleton, abra o DevTools do navegador, aba **Network**, selecione uma conexão mais lenta e dê F5.
 
-The context supports:
+### 3. Vazio
 
-- adding a product;
-- merging repeated additions into the same row;
-- removing an item;
-- incrementing/decrementing safely through quantity controls;
-- setting a quantity while respecting stock;
-- deriving the total quantity badge;
-- persisting the item list in `localStorage`.
+Pesquise por um termo que não exista, por exemplo:
 
-The cart stores only the item quantity and a compact product snapshot. Subtotal, discount, and total are always derived from the current cart items and are not kept as separately synchronized state.
+```text
+nao-existe-produto-987654
+```
 
-The checkout action is intentionally limited to an explanatory in-page status message because real checkout/payment integration is outside the assignment scope; the button is not left inert.
+A interface mostra o estado de nenhum produto encontrado e oferece **Clear filters**.
 
-## Responsive behavior
+### 4. Erro
 
-The same React component tree adapts with CSS to the supplied responsive model:
+No DevTools, aba **Network**, marque **Offline** e recarregue a página. A interface exibe o painel de erro e o botão **Try again**. Depois desmarque Offline e clique no botão para a requisição funcionar novamente.
 
-- desktop: four product columns;
-- tablet: two product columns;
-- mobile: one product column;
-- compact mobile header with menu/back control and cart badge;
-- mobile product detail with stacked gallery/content;
-- mobile cart rows with a fixed bottom total/checkout area.
+## Camada de serviços
 
-Primary QA widths are 360 px, 768 px, and 1440 px. Layout rules avoid horizontal overflow by allowing content columns to shrink, truncating long labels where appropriate, and making category pills horizontally scrollable on small screens.
+Todas as chamadas para produtos ficam centralizadas em:
 
-## Loading, error, and empty states
+```text
+src/services/api.js
+```
 
-The application includes:
+Os componentes não montam URLs da DummyJSON diretamente.
 
-- product-card skeletons while the storefront is loading;
-- a product-detail skeleton;
-- controlled network error panels with functional `Try again` actions;
-- a no-search-results state distinct from network failure;
-- an empty-cart state with a route back to the store;
-- a controlled product-not-found state for invalid IDs;
-- a 404 route.
+Funções principais:
 
-Applicable requests are cancelled with `AbortController` when parameters change or a component unmounts, preventing stale responses from replacing newer results.
+- `listProducts(...)`
+- `getProduct(...)`
+- `listCategories(...)`
 
-## Accessibility extensions
+A camada valida `response.ok`, valida os formatos importantes retornados pela API e converte falhas em mensagens controladas.
 
-The implementation includes practical accessibility without changing the reference design:
+## AbortController
 
-- semantic headings, navigation, sections, articles, lists/definitions where useful;
-- real buttons for actions and real links for navigation;
-- unique form control IDs;
-- descriptive image alternatives;
-- visible `:focus-visible` states;
-- labels for icon-only controls;
-- live status text for cart additions and checkout feedback;
-- keyboard-operable product gallery thumbnails, including Left/Right Arrow navigation;
-- active pagination/category semantics with `aria-current` and `aria-pressed`.
+As requisições da listagem, categorias, detalhes e produtos relacionados usam `AbortController`.
 
-## Main project structure
+Quando os parâmetros mudam ou o componente desmonta, a requisição antiga é cancelada. Isso evita que uma resposta atrasada substitua uma busca mais recente.
+
+## Busca com hook próprio
+
+O arquivo:
+
+```text
+src/hooks/useDebouncedValue.js
+```
+
+implementa o debounce da busca. O usuário pode digitar normalmente e o parâmetro `search` só é atualizado após 400 ms sem nova digitação.
+
+## Carrinho e totais derivados
+
+O estado global do carrinho vive em:
+
+```text
+src/context/CartContext.jsx
+```
+
+O contexto é responsável por:
+
+- adicionar produto;
+- somar quantidade quando o produto já existe;
+- remover produto;
+- alterar quantidade;
+- respeitar o estoque;
+- calcular a quantidade total para o badge do header;
+- salvar a lista no `localStorage`.
+
+Na tela `src/pages/Cart.jsx`, subtotal, desconto e total são calculados com `reduce()` a partir dos itens atuais. Esses valores não são mantidos como um segundo estado sincronizado.
+
+## Produtos relacionados
+
+Na página de detalhes, a aplicação consulta produtos da mesma categoria e mostra até quatro itens diferentes do produto atual.
+
+A lógica fica em:
+
+```text
+src/pages/ProductDetails.jsx
+```
+
+## Sign in
+
+O botão **Sign in** é funcional no front-end. Ele abre um modal e aceita e-mail e senha para uma autenticação demonstrativa local.
+
+Não existe backend nem envio de credenciais para servidor. O estado demonstrativo de login é armazenado apenas neste navegador.
+
+## Preços
+
+O projeto usa a regra definida para a atividade:
+
+```text
+preço final em USD = price × (1 - discountPercentage / 100)
+cotação fixa = R$ 5,20 por USD
+```
+
+A formatação usa `Intl.NumberFormat` com moeda BRL.
+
+## Responsividade
+
+A interface foi preparada para desktop, tablet e celular.
+
+Referências de teste:
+
+- 1440 px: desktop;
+- 768 px: tablet;
+- 360 px: celular.
+
+## Acessibilidade
+
+Entre as melhorias implementadas estão:
+
+- headings semânticos;
+- links para navegação e botões para ações;
+- labels associados aos campos;
+- IDs únicos nos campos de busca;
+- `alt` nas imagens;
+- foco visível;
+- `aria-label` em controles somente com ícone;
+- `aria-live` nas confirmações do carrinho;
+- galeria navegável por teclado;
+- `aria-current` e `aria-pressed` quando aplicável.
+
+## Deploy na Vercel
+
+O arquivo `vercel.json` já está na raiz do projeto:
+
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+Essa configuração é necessária para que rotas do React Router funcionem quando o usuário atualiza a página diretamente.
+
+### Publicação
+
+1. deixe o repositório `vitrine-alegre` público no GitHub;
+2. entre na Vercel usando a conta do GitHub;
+3. escolha **Add New → Project**;
+4. importe `vitrine-alegre`;
+5. confirme o preset **Vite**;
+6. confirme que o **Root Directory** é a raiz do repositório;
+7. clique em **Deploy**;
+8. abra o endereço publicado;
+9. entre em um produto, por exemplo `/products/1`;
+10. dê F5 nessa página;
+11. teste em aba anônima e no celular;
+12. copie o endereço real da Vercel e substitua a linha **PENDENTE** no topo deste README;
+13. faça commit e push dessa alteração.
+
+## Estrutura principal
 
 ```text
 src/
-  components/          shared visual and interactive components
+  components/
   context/
-    CartContext.jsx    global cart state + persistence
+    CartContext.jsx
   hooks/
     useDebouncedValue.js
   pages/
@@ -184,7 +338,7 @@ src/
     Cart.jsx
     NotFound.jsx
   services/
-    api.js             all DummyJSON requests
+    api.js
   styles/
     global.css
   utils/
@@ -193,26 +347,64 @@ src/
     products.js
   App.jsx
   main.jsx
+
 tests/
   api.test.js
   pricing.test.js
+
+README.md
+PROMPTS.md
+DIARIO-DA-IA.md
+vercel.json
 ```
 
-## Implemented assignment extensions
+`node_modules/` e `dist/` estão ignorados pelo `.gitignore` e não devem ser enviados ao GitHub.
 
-1. Cart persistence with `localStorage`.
-2. `AbortController` request cancellation.
-3. Accessibility and keyboard improvements.
-4. Reusable custom debounce hook for storefront search.
+## Arquivos de uso de IA
 
-## Design decisions
+### `PROMPTS.md`
 
-- The supplied palette is implemented as CSS custom properties and reused throughout the application.
-- Product cards preserve the reference's image/body split, compact metadata hierarchy, rating, original/final price treatment, discount badge, and green primary action.
-- Image/title regions navigate to details while `Add` remains a separate button. This deliberately avoids invalid nested interactive elements such as a button inside an anchor.
-- The mobile cart uses the reference's compact card rows and fixed bottom action area rather than shrinking the desktop order-summary panel.
-- UI copy is English as required by the implementation brief, while monetary formatting remains BRL/`pt-BR` as required by the source assignment.
+Registra os prompts e instruções que produziram ou modificaram código no projeto.
 
-## Deployment
+### `DIARIO-DA-IA.md`
 
-Any static host that supports SPA rewrites can serve the built `dist/` directory. Netlify can use the included `public/_redirects`; Vercel can use the included `vercel.json`. For another host, configure unknown application paths to return `index.html` so `/products/:id` and `/cart` refresh correctly.
+Registra erros reais encontrados durante o desenvolvimento, com diagnóstico, causa e correção.
+
+## Trecho recomendado para a apresentação oral
+
+Um bom trecho para apresentar é o método `addItem` e os valores derivados de `CartContext.jsx`.
+
+Ele permite explicar React de verdade:
+
+- `useState`;
+- `useCallback`;
+- atualização funcional de estado;
+- `find` e `map`;
+- por que um produto repetido aumenta quantidade;
+- limite pelo estoque;
+- `localStorage`;
+- `useMemo` para a quantidade total;
+- compartilhamento do estado pelo Context.
+
+Durante a demonstração, adicione um produto pela vitrine, mostre a mensagem **“Produto já adicionado no carrinho”** dentro do card, entre no produto e mostre a mesma indicação nos detalhes. Depois adicione o mesmo item novamente e abra o carrinho para explicar como a quantidade é atualizada.
+
+Outro trecho forte é o `useEffect` da listagem em `Storefront.jsx`, porque ele reúne URL, loading, erro, `AbortController`, paginação e limpeza do efeito.
+
+## Checklist antes de enviar
+
+- [ ] repositório público chamado `vitrine-alegre`;
+- [ ] histórico com commits reais do processo, não somente um commit genérico;
+- [ ] `node_modules/` não está no GitHub;
+- [ ] link real do GitHub no topo deste README;
+- [ ] link real da Vercel no topo deste README;
+- [ ] `PROMPTS.md` no repositório;
+- [ ] `DIARIO-DA-IA.md` com pelo menos cinco erros reais;
+- [ ] site abre em aba anônima;
+- [ ] site abre no celular;
+- [ ] F5 em `/products/:id` funciona;
+- [ ] busca funciona;
+- [ ] categoria funciona;
+- [ ] ordenação funciona;
+- [ ] paginação aparece na URL;
+- [ ] carrinho mantém produtos após F5;
+- [ ] trecho de apresentação escolhido e compreendido.

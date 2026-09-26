@@ -1,51 +1,99 @@
-# AI Prompts and Instructions Used
+# PROMPTS.md — uso de IA no Vitrine Alegre
 
-This file records the meaningful AI instructions that materially influenced the implementation. It intentionally omits conversational filler.
+Este arquivo registra instruções que realmente produziram ou alteraram código do projeto. Foram removidas conversas sem impacto no código.
 
-## 1. Master implementation brief
+## 1. Implementação-base da atividade
 
-The primary instruction was the full **MASTER IMPLEMENTATION PROMPT — VITRINE ALEGRE** supplied with the assignment package. It defined the execution order, source-of-truth rules, React/Vite constraints, DummyJSON integration, routing, cart behavior, URL state, error handling, responsiveness, accessibility, documentation, QA, and final ZIP requirements.
+**Instrução usada:** implementar a Vitrine Alegre em React/Vite seguindo a especificação da atividade, usando a DummyJSON, React Router, carrinho compartilhado, estados de carregamento/erro/vazio, responsividade, tratamento da API e documentação do uso de IA.
 
-**Used for:** the complete project scope, technical architecture, validation checklist, and definition of done.
+**Impacto no código:** estrutura do projeto, páginas, componentes, camada de serviços, rotas, carrinho, estilos, testes e documentação.
 
-## 2. Source hierarchy instruction
+---
 
-The PDF was designated as the authoritative functional specification and the supplied PNG mockups as the authoritative visual reference. The DOCX was required as a comparison source.
+## 2. Estado da listagem na URL
 
-**Used for:** deciding behavior when prose and visuals had different levels of detail, extracting the palette/dimensions, and performing screen-by-screen visual implementation.
+**Instrução usada:** busca, categoria, ordenação e página não poderiam existir somente em estado local; deveriam ser representadas na URL para que F5, Voltar/Avançar e compartilhamento da página preservassem a vitrine.
 
-## 3. English-interface override
+**Impacto no código:** `Storefront.jsx`, `useSearchParams`, normalização dos parâmetros e reset da página ao trocar filtros.
 
-The implementation brief explicitly required every user-facing application string to be English while preserving the brand name **Vitrine Alegre** and retaining BRL currency formatting.
+---
 
-**Used for:** route labels, buttons, search, errors, empty states, detail labels, cart labels, 404 content, accessibility labels, and documentation.
+## 3. Busca com debounce
 
-## 4. URL-state and search instruction
+**Instrução usada:** implementar busca sem disparar uma alteração a cada tecla, aguardando aproximadamente 400 ms após a última digitação.
 
-The storefront was required to represent search, category, and page state in the URL and to debounce search updates by approximately 400 ms, with page resets when search/category changes.
+**Impacto no código:** criação de `src/hooks/useDebouncedValue.js` e integração com `Storefront.jsx`.
 
-**Used for:** `useSearchParams` architecture, the reusable `useDebouncedValue` hook, Back/Forward behavior, shared/bookmarkable URLs, and page validation.
+---
 
-## 5. API and cancellation instruction
+## 4. Camada de serviços e tratamento da API
 
-All DummyJSON communication had to live in `src/services/api.js`, validate HTTP failures, use actual API fields/response shapes, and cancel obsolete requests with `AbortController`.
+**Instrução usada:** concentrar toda comunicação com DummyJSON em `src/services/api.js`, verificar `response.ok`, trabalhar com o formato real da API e tratar falhas de forma controlada.
 
-**Used for:** the API abstraction, request/error classes, list/detail/category validation, cancellation cleanup, and API-focused tests.
+**Impacto no código:** `api.js`, `ApiError`, `listProducts`, `getProduct`, `listCategories` e testes de serviço.
 
-## 6. Cart architecture instruction
+---
 
-The cart had to be shared globally with React Context, merge duplicate product additions, persist in `localStorage`, and derive totals rather than storing synchronized total state.
+## 5. Cancelamento de requisições
 
-**Used for:** `CartContext`, compact stored product snapshots, quantity operations, header badge, cart calculations, and refresh persistence design.
+**Instrução usada:** evitar que respostas antigas substituíssem resultados novos quando os parâmetros mudassem, usando `AbortController` e cleanup dos efeitos.
 
-## 7. Strict visual-reproduction instruction
+**Impacto no código:** listagem, categorias, detalhes do produto e produtos relacionados.
 
-The implementation was explicitly told not to redesign the supplied interface or introduce an unrelated design system.
+---
 
-**Used for:** the four-column desktop grid, 282×444 card target, 24 px grid rhythm, brand/accent treatment, product detail split, order summary panel, mobile header, mobile stacked detail page, and fixed mobile cart summary.
+## 6. Carrinho compartilhado e persistente
 
-## 8. Final packaging instruction
+**Instrução usada:** o carrinho deveria usar Context, somar quantidade ao adicionar o mesmo produto, respeitar estoque, persistir em `localStorage` e calcular totais a partir dos itens em vez de manter totais duplicados no estado.
 
-The final ZIP was required to contain project files directly at archive root, never inside a redundant second `vitrine-alegre/` folder.
+**Impacto no código:** `CartContext.jsx`, `Cart.jsx`, header e botões de adicionar.
 
-**Used for:** final archive layout and extraction validation procedure.
+---
+
+## 7. Correções solicitadas depois da primeira versão
+
+**Prompt real do desenvolvimento:**
+
+> "analise a página e você irá adicionar as mudanças que estão informadas abaixo, sem modificar o resto que já está feito. quando eu entro em um produto, a logo lá no header some, ela não pode sumir. deve aparecer uma mensagem ao incluir produto ao carinho, tipo, produto adicionado no carrinho, como uma confirmação, mensagem que produto já está adicionado no carinho quando você seleciona ele. sign in deve esar funcional, não precisa de backend apenas que sejá clicavel"
+
+**Impacto no código:**
+
+- logo mantida no header da página de produto;
+- toast de confirmação do carrinho;
+- mensagem diferente quando o produto já existe no carrinho;
+- botão Sign in passou a abrir uma interface funcional somente no front-end.
+
+---
+
+## 8. Produtos relacionados
+
+**Prompt real do desenvolvimento:**
+
+> "gere agora uma aba que quando voce entra em um produto aparece em baixo uma lista de produtos relacionados"
+
+**Impacto no código:** `ProductDetails.jsx` passou a buscar produtos da mesma categoria, excluir o item atual e mostrar até quatro relacionados no final da página.
+
+---
+
+## 9. Empacotamento do projeto
+
+**Instrução usada:** o ZIP deveria abrir diretamente nos arquivos do projeto, sem uma pasta com o mesmo projeto dentro de outra pasta, e não deveria transportar `node_modules`.
+
+**Impacto no projeto:** pacote final com `package.json`, `src`, `public` e demais arquivos diretamente na raiz do ZIP. As dependências são instaladas com `npm install` na máquina do usuário.
+
+---
+
+## 10. Preparação para a entrega na Vercel
+
+**Prompt real da etapa final:** preparar o projeto para a entrega com repositório público, README com links no topo, `PROMPTS.md`, `DIARIO-DA-IA.md`, deploy obrigatório na Vercel, F5 nas rotas e pelo menos uma extensão da seção 4.3.
+
+**Impacto no projeto:** revisão do README, documentação explícita das extensões, revisão do `vercel.json`, instruções de demonstração dos quatro estados e checklist final.
+
+
+## 11. Indicação discreta no próprio produto
+
+**Prompt real do desenvolvimento:**
+
+> "mande novamente o projeto a unica diferença é que você vai acrescentar o seguinte, "produto já adicionado no carrinho" depois de você adicionar um produto no carrinho, lá na aba inicial do site vai aparecer essa pequena mensagem, sem muito destaque, dentro do card do produto, entendeu? E quando você entra no card do produto também. Mas ela só deverá aparecer realmente quando você [...] adicionar um produto no carrinho, só após isso."
+
+**Impacto no código:** `ProductCard.jsx` e `ProductDetails.jsx` passaram a verificar se o produto está no carrinho e, somente nessa condição, mostram a mensagem discreta pedida. O estilo foi mantido pequeno para não competir visualmente com preço e botão.

@@ -30,7 +30,7 @@ function dimensionsText(dimensions) {
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const [state, setState] = useState({ product: null, loading: true, error: null });
   const [quantity, setQuantity] = useState(1);
   const [retryVersion, setRetryVersion] = useState(0);
@@ -83,6 +83,7 @@ export default function ProductDetails() {
   }, [state.product]);
 
   const product = state.product;
+  const isInCart = product ? items.some((item) => item.id === Number(product.id)) : false;
   const images = useMemo(() => {
     if (!product) return [];
     const candidates = [...(Array.isArray(product.images) ? product.images : []), product.thumbnail].filter(Boolean);
@@ -174,6 +175,9 @@ export default function ProductDetails() {
                 <QuantitySelector value={quantity} onChange={setQuantity} max={Math.max(1, stock)} ariaLabel={`Quantity of ${product.title}`} />
                 <button type="button" className="primary-button product-info__add" onClick={addToCart} disabled={stock < 1}>Add to cart</button>
               </div>
+              {isInCart ? (
+                <p className="product-info__announcement" role="status">Produto já adicionado no carrinho</p>
+              ) : null}
 
               <div className="fulfillment-grid">
                 <div><span>Shipping</span><strong>{product.shippingInformation || 'Standard shipping'}</strong></div>
